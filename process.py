@@ -1,7 +1,8 @@
 from PyPDF2 import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-def extract_text_from_pdf(pdf_path: str) -> str:
+
+def extract_text_from_pdf(pdf_path): 
     """Extract text from PDF file"""
 
     reader = PdfReader(pdf_path)
@@ -13,11 +14,12 @@ def extract_text_from_pdf(pdf_path: str) -> str:
     print(f"Extracted {len(text)} characters\n")
     return text
 
-def split_text(text: str) -> list[str]:
+def split_text(text): 
+    """Split the text into chunks"""
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,  # chunk size (characters)
-        chunk_overlap=200,  # chunk overlap (characters)
-        add_start_index=True,  # track index in original document
+        chunk_size=CHUNK_SIZE,  
+        chunk_overlap=CHUNK_OVERLAP,  
+        add_start_index=True,
     )
 
     all_splits = text_splitter.split_text(text)
