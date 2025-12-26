@@ -4,23 +4,24 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from config import EMBEDDING_MODEL
 
+class Embedding:
+    def __init__(self):
+        print(f"Initializing embeddings model: {EMBEDDING_MODEL}")
+        self.embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+        self.vector_store = None
 
-def initialize_embeddings_model():
-    embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+    def create_vector_store(self, split_chunks):
+        embedding_dim = len(self.embeddings.embed_query("hello world"))
+        index = faiss.IndexFlatL2(embedding_dim)
 
-def create_vector_store(split_chunks):
-    embedding_dim = len(embeddings.embed_query("hello world"))
-    index = faiss.IndexFlatL2(embedding_dim)
+        self.vector_store = FAISS(
+            embedding_function=self.embeddings,
+            index=index,
+            docstore=InMemoryDocstore(),
+            index_to_docstore_id={},
+        )
 
-    vector_store = FAISS(
-        embedding_function=embeddings,
-        index=index,
-        docstore=InMemoryDocstore(),
-        index_to_docstore_id={},
-    )
+        self.vector_store.add_texts(split_chunks)
 
-    vector_store.add_texts(split_chunks)
-    return vector_store
-
-
-
+        print(f"Vector store created with {len(split_chunks)} embeddings")
+        return self.vector_store
