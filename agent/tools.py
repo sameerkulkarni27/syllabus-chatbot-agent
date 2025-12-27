@@ -12,17 +12,7 @@ def initialize_tools(vector_store):
         List of tools
     """
 
-    @tool(
-        "query_syllabus_info",
-        response_format="content_and_artifact",
-        description=(
-            "Retrieve information from the syllabus provided to answer questions. "
-            "Use this for ANY question about course policies, grading, schedules, "
-            "exams, assignments, attendance, or any course-related information. "
-            "This is the ONLY source of information available. "
-            "Non course-related queries are NOT to be considered."
-        ),
-    )
+    @tool
     def query_syllabus_info(query):
         """
         Retrieve relevant information from the syllabus.

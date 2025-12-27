@@ -13,4 +13,5 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-large")
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "1000"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "200"))
 
-LLM_MODEL = "openai:gpt-4o-mini"
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0"))
