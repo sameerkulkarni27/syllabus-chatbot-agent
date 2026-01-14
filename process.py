@@ -1,6 +1,8 @@
 from PyPDF2 import PdfReader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings
 from config import CHUNK_SIZE, CHUNK_OVERLAP
+
 
 def extract_text_from_pdf(pdf_path): 
     """Extract text from PDF file"""
@@ -15,13 +17,12 @@ def extract_text_from_pdf(pdf_path):
 
 def split_text(text): 
     """Split the text into chunks"""
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,  
-        chunk_overlap=CHUNK_OVERLAP,  
-        add_start_index=True,
+    text_splitter = SemanticChunker(
+        OpenAIEmbeddings(),
+        breakpoint_threshold_type="percentile",
+        breakpoint_threshold_amount=95  
     )
 
     all_splits = text_splitter.split_text(text)
 
     return all_splits
-

@@ -1,5 +1,6 @@
 from langchain_core.tools import tool
 
+
 def initialize_tools(vector_store):
     """
     Initialize tools for the syllabus agent. Provide the query_syllabus_info()
