@@ -6,7 +6,6 @@ from config import CHUNK_SIZE, CHUNK_OVERLAP
 
 def extract_text_from_pdf(pdf_path): 
     """Extract text from PDF file"""
-
     reader = PdfReader(pdf_path)
     text = ""
 
