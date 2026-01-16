@@ -66,6 +66,32 @@ async def run_agent(vector_store):
         except Exception as e:
             print(f"[AGENT ERROR] {str(e)}\n")
 
+async def get_agent_response(vector_store, question):
+    """Get response from agent to a query from user. Use w/ FastAPI for EACH user question"""
+
+    # Initialize LLM
+    llm = ChatOpenAI(
+        model=LLM_MODEL,
+        temperature=LLM_TEMPERATURE
+    )
+    
+    # Get tools
+    tools = initialize_tools(vector_store)
+
+     # Create prompt
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", SYSTEM_PROMPT),
+        ("human", "{input}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ])
+
+    # Create agent
+    agent = create_openai_tools_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
+
+    response = await agent_executor.ainvoke({"input": question})
+    answer = response["output"]
+    return answer
 
 if __name__ == "__main__":
     print("Please run main.py to start the chatbot")
