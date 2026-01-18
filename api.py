@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from pinecone_init import PineconeClient
+from config import PORT
 from pydantic import BaseModel
 from process import extract_text_from_pdf, split_text
 from agent.agent import get_agent_response
@@ -85,4 +86,4 @@ async def list_syllabi():
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)

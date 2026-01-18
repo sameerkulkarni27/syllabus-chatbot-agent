@@ -23,3 +23,5 @@ CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "200"))
 
 LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0"))
+
+PORT = int(os.getenv("PORT", 8000))
