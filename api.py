@@ -1,6 +1,6 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Header
 from pinecone_init import PineconeClient
-from config import PORT
+from config import PORT, API_KEY
 from pydantic import BaseModel
 from process import extract_text_from_pdf, split_text
 from agent.agent import get_agent_response
@@ -9,7 +9,9 @@ import tempfile
 import os
 
 
-app = FastAPI()
+app = FastAPI(title="Syllabus Chatbot API")
+
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 pinecone = PineconeClient()
 
@@ -17,13 +19,19 @@ class UserQuery(BaseModel):
     namespace: str
     query: str
 
+async def verify_api_key(api_key: str = Header(...)):
+    if (api_key != API_KEY):
+        raise HTTPException(status_code = 401, detail = "Wrong API key")
+
+    return api_key
+
 @app.get("/")
 async def root():
     return {
         "message": "Syllabus Chatbot API"
     }
 
-@app.post("/upload")
+@app.post("/upload", dependencies=[Depends(verify_api_key)])
 async def upload_syllabus(file: UploadFile, namespace: str):
     """Upload syllabus PDF"""
         
@@ -58,7 +66,7 @@ async def upload_syllabus(file: UploadFile, namespace: str):
     finally:
         os.unlink(tmp_path)
 
-@app.post("/ask")
+@app.post("/ask", dependencies=[Depends(verify_api_key)])
 async def ask_question(request: UserQuery):
     """Ask a question about uploaded syllabus"""
 
