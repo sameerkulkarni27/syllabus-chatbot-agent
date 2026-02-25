@@ -7,9 +7,19 @@ from agent.agent import get_agent_response
 import uvicorn
 import tempfile
 import os
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Syllabus Chatbot API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -19,7 +29,7 @@ class UserQuery(BaseModel):
     namespace: str
     query: str
 
-async def verify_api_key(api_key: str = Header(...)):
+async def verify_api_key(api_key: str = Header(..., alias="api-key")):
     if (api_key != API_KEY):
         raise HTTPException(status_code = 401, detail = "Wrong API key")
 

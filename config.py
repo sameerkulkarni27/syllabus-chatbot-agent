@@ -26,4 +26,5 @@ LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0"))
 
 PORT = int(os.getenv("PORT", 8000))
 
+API_URL = os.getenv("API_URL")
 API_KEY = os.getenv("API_KEY")
