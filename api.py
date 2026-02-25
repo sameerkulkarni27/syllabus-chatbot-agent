@@ -30,6 +30,10 @@ class UserQuery(BaseModel):
     query: str
 
 async def verify_api_key(api_key: str = Header(..., alias="api-key")):
+    print(f"RECEIVED: '{api_key}'")
+    print(f"EXPECTED: '{API_KEY}'")
+    print(f"MATCH: {api_key == API_KEY}")
+
     if (api_key != API_KEY):
         raise HTTPException(status_code = 401, detail = "Wrong API key")
 
